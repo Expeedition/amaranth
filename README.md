@@ -1,2 +1,2 @@
 # amaranth
-( TIME-CHALLANGE ) Random python based planet generator made in 36 minutes
+ill explain every line of code in this later, for now read the comments while i go be gay with my bf 
