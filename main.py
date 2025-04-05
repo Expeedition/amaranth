@@ -44,7 +44,6 @@ def generate_planet(rotation_offset):
     cx, cy = PIXEL_WIDTH // 2, PIXEL_HEIGHT // 2
     terrain_scale = 0.07
     cloud_scale = 0.4
-    light_map_scale = 0.3
 
     for y in range(PIXEL_HEIGHT):
         for x in range(PIXEL_WIDTH):
@@ -60,8 +59,6 @@ def generate_planet(rotation_offset):
             elevation = noise.pnoise2(nx + seed, ny + seed, octaves=6, persistence=0.5, lacunarity=2.0)
             norm = elevation + 0.5
 
-            # City light map noise (stable)
-            light_val = noise.pnoise2(nx + light_seed, ny + light_seed, octaves=2)
 
             # Determine base terrain color
             if norm < 0.5:
@@ -90,19 +87,16 @@ def generate_planet(rotation_offset):
                 darkness = 0.3
                 base_color = tuple(int(c * darkness) for c in base_color)
 
-                # Add soft, stable city light
-                if 0.45 <= norm < 0.85 and light_val > 0.25:
-                    base_color = CITY_LIGHT
-
             # Apply terrain color
             pixel_surface.set_at((x, y), base_color)
 
-            # Clouds (subtle)
             cloud_val = noise.pnoise2((x + rotation_offset * 1.5) * cloud_scale,
                                       y * cloud_scale + cloud_seed,
-                                      octaves=3)
-            if cloud_val > 0.3:
-                alpha = 80 if is_day else 50
+                                      octaves=4, persistence=0.6, lacunarity=2.2)
+
+            if cloud_val > 0.20:  # Lower threshold → more coverage = thicker clouds
+                thickness = min((cloud_val - 0.15) / 0.5, 1.0)  # scale up to max 1.0
+                alpha = int(150 * thickness + 50)  # base alpha 50 → 200 max
                 pixel_surface.set_at((x, y), (*CLOUD[:3], alpha))
 
     # Scale up and draw
