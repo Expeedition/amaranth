@@ -15,7 +15,7 @@ SCALE = 4
 WINDOW_WIDTH = PIXEL_WIDTH * SCALE
 WINDOW_HEIGHT = PIXEL_HEIGHT * SCALE
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-pygame.display.set_caption("Pastel Planet with Curved Shadow and City Lights")
+pygame.display.set_caption("Amaranth")
 
 # Pastel colors
 WATER = (160, 196, 255)
