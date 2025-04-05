@@ -65,13 +65,10 @@ def generate_planet(rotation_offset):
 
             # Determine base terrain color
             if norm < 0.5:
-                shimmer = noise.pnoise2((x + rotation * 100) * 0.2, (y + rotation * 100) * 0.2, octaves=1)
-                shimmer = (shimmer + 0.5) * 0.03
+                depth = (0.5 - norm) / 0.5  # 0 (shallow) → 1 (deep)
+                depth_darkness = 0.6 + depth * 0.4  # Brightness 0.6 → 1.0
 
-                wave = math.sin(x * 0.3 + rotation * 5) * 0.01 + math.sin(y * 0.2 + rotation * 3) * 0.1
-
-                brightness = min(max(0.8 + shimmer + wave, 0.5), 0.8)
-                base_color = tuple(int(c * brightness) for c in WATER)
+                base_color = tuple(int(c * depth_darkness) for c in WATER)
 
             elif norm < 0.55:
                 base_color = BEACH
